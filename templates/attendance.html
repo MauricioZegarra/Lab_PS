@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+
+{% block title %}AsistPro - Registro de Asistencia{% endblock %}
+
+{% block content %}
+<div class="row mb-4 animate-fade-in" id="attendancePageHeader">
+    <div class="col-12">
+        <h1 class="h2 fw-bold text-dark mb-1" id="attendanceTitle">Registro de Asistencia</h1>
+        <p class="text-muted mb-0" id="attendanceSubtitle">Seleccione una fecha y marque el estado de asistencia para cada estudiante.</p>
+    </div>
+</div>
+
+<!-- Filtro de Fecha -->
+<div class="row mb-4 animate-fade-in" id="dateFilterSection" style="animation-delay: 0.1s;">
+    <div class="col-12">
+        <div class="card card-custom">
+            <div class="card-body p-3">
+                <form action="{{ url_for('attendance') }}" method="GET" class="row g-3 align-items-center" id="dateSelectForm">
+                    <div class="col-12 col-sm-auto">
+                        <label for="date" class="form-label mb-0 fw-semibold text-secondary"><i class="bi bi-calendar-event-fill me-1"></i> Fecha de Asistencia:</label>
+                    </div>
+                    <div class="col-12 col-sm-auto">
+                        <input type="date" 
+                               class="form-control form-control-custom" 
+                               id="attendanceDate" 
+                               name="date" 
+                               value="{{ selected_date.isoformat() }}" 
+                               data-testid="attendance-date-input">
+                    </div>
+
+                    <div class="col col-sm-auto ms-auto text-end" id="dateSummaryBox">
+                        <span class="badge bg-warning-subtle text-warning px-3 py-2 fs-8 fw-semibold border border-warning-subtle" id="statusBadge">
+                            <i class="bi bi-exclamation-circle"></i> Pendiente de Registro
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Formulario de Guardado de Asistencias -->
+<div class="row animate-fade-in" id="attendanceFormSection" style="animation-delay: 0.2s;">
+    <div class="col-12">
+        {% if students %}
+        <form action="{{ url_for('attendance') }}" method="POST" id="attendanceForm">
+            <input type="hidden" name="attendance_date" id="attendanceDateHidden" value="{{ selected_date.isoformat() }}">
+            <div class="card card-custom mb-4">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-custom mb-0" id="attendanceTable">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Estudiante</th>
+                                    <th>Carrera</th>
+                                    <th class="text-center" style="width: 320px;">Estado de Asistencia</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTableBody">
+                                {% for student in students %}
+                                    <tr data-testid="attendance-row-{{ student.student_code }}" data-student-id="{{ student.id }}" data-student-code="{{ student.student_code }}">
+                                        <td><code class="text-dark fw-bold">{{ student.student_code }}</code></td>
+                                        <td><strong>{{ student.last_name }}</strong>, {{ student.first_name }}</td>
+                                        <td><span class="badge bg-light text-dark">{{ student.career }}</span></td>
+                                        <td>
+                                            <div class="attendance-radio-group" id="radioGroup-{{ student.id }}">
+                                                {# Solo marcamos data-from-db en radios con registro REAL en la BD #}
+                                                <label class="attendance-radio-btn">
+                                                    <input type="radio" 
+                                                           name="status_{{ student.id }}" 
+                                                           value="Presente" 
+                                                           class="attendance-radio"
+                                                           data-student-id="{{ student.id }}"
+                                                           data-student-code="{{ student.student_code }}"
+                                                           {% if attendance_map.get(student.id) == 'Presente' %}checked data-from-db="true"{% endif %}>
+                                                    <span class="radio-presente">P</span>
+                                                </label>
+                                                
+                                                <label class="attendance-radio-btn">
+                                                    <input type="radio" 
+                                                           name="status_{{ student.id }}" 
+                                                           value="Tardanza" 
+                                                           class="attendance-radio"
+                                                           data-student-id="{{ student.id }}"
+                                                           data-student-code="{{ student.student_code }}"
+                                                           {% if attendance_map.get(student.id) == 'Tardanza' %}checked data-from-db="true"{% endif %}>
+                                                    <span class="radio-tardanza">T</span>
+                                                </label>
+                                                
+                                                <label class="attendance-radio-btn">
+                                                    <input type="radio" 
+                                                           name="status_{{ student.id }}" 
+                                                           value="Falta" 
+                                                           class="attendance-radio"
+                                                           data-student-id="{{ student.id }}"
+                                                           data-student-code="{{ student.student_code }}"
+                                                           {% if attendance_map.get(student.id) == 'Falta' %}checked data-from-db="true"{% endif %}>
+                                                    <span class="radio-falta">F</span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="row align-items-center mb-5" id="attendanceActions">
+                <div class="col-6">
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary" id="btnCancelAttendance">
+                        <i class="bi bi-arrow-left"></i> Cancelar
+                    </a>
+                </div>
+                <div class="col-6 text-end">
+                    <button type="button" class="btn btn-primary-custom px-4" id="btnSaveAttendance" data-testid="save-attendance-btn">
+                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> Guardar Registro de Asistencia
+                    </button>
+                </div>
+            </div>
+        </form>
+        {% else %}
+            <div class="card card-custom mb-4">
+                <div class="card-body p-0">
+                    <div class="text-center py-5" id="noStudentsAttendance">
+                        <i class="bi bi-people text-muted fs-1 mb-2"></i>
+                        <p class="text-muted mb-0">No se encontraron estudiantes para tomar asistencia. Primero regístrelos en la sección de Estudiantes.</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Función para guardar asistencia y enviar al servidor SQLite
+    function saveAttendance() {
+        const dateInput = document.getElementById('attendanceDate');
+        const selectedDate = dateInput.value;
+        
+        if (!selectedDate) {
+            alert('❌ Por favor, seleccione una fecha primero');
+            return;
+        }
+        
+        // Obtener todos los radios seleccionados
+        const allRadios = document.querySelectorAll('.attendance-radio:checked');
+        const attendances = {};
+        
+        allRadios.forEach(radio => {
+            const studentId = radio.getAttribute('data-student-id');
+            const status = radio.value;
+            attendances[studentId] = status;
+        });
+        
+        // Verificar que todos los estudiantes tengan estado registrado
+        const totalStudents = document.querySelectorAll('#attendanceTableBody tr').length;
+        const selectedCount = Object.keys(attendances).length;
+        
+        if (selectedCount !== totalStudents) {
+            alert(`⚠️ Por favor, seleccione un estado (P/T/F) para todos los ${totalStudents} estudiantes. Faltan ${totalStudents - selectedCount}.`);
+            return false;
+        }
+        
+        // Sincronizar el input oculto de fecha en el formulario de envío
+        const hiddenDateInput = document.getElementById('attendanceDateHidden');
+        if (hiddenDateInput) {
+            hiddenDateInput.value = selectedDate;
+        }
+        
+        // Enviar el formulario HTML para guardar en SQLite
+        const form = document.getElementById('attendanceForm');
+        if (form) {
+            form.submit();
+        }
+        
+        return true;
+    }
+    
+    // Función para sincronizar / inicializar los radios de la interfaz
+    function syncAttendanceData() {
+        const dateInput = document.getElementById('attendanceDate');
+        const currentDate = dateInput.value;
+        
+        // Verificar si la base de datos ya trajo datos REALES
+        // Solo contamos los radios con data-from-db="true" (set por Jinja únicamente cuando hay registro en attendance_map)
+        const dbRadios = document.querySelectorAll('.attendance-radio[data-from-db="true"]');
+        const hasDatabaseData = dbRadios.length > 0;
+        
+        if (hasDatabaseData) {
+            // Si la base de datos tiene datos reales, los dejamos como están y actualizamos el badge
+            const statusBadge = document.getElementById('statusBadge');
+            if (statusBadge) {
+                const totalRows = document.querySelectorAll('#attendanceTableBody tr').length;
+                if (dbRadios.length < totalRows) {
+                    statusBadge.className = 'badge bg-warning-subtle text-warning px-3 py-2 fs-8 fw-semibold border border-warning-subtle';
+                    statusBadge.innerHTML = '<i class="bi bi-exclamation-circle"></i> Registro Incompleto';
+                } else {
+                    statusBadge.className = 'badge bg-success-subtle text-success px-3 py-2 fs-8 fw-semibold border border-success-subtle';
+                    statusBadge.innerHTML = '<i class="bi bi-shield-check"></i> Asistencia Guardada';
+                }
+            }
+        } else {
+            // Si no hay datos en la DB, todo inicia desmarcado para que el docente elija activamente
+            const allRadios = document.querySelectorAll('.attendance-radio');
+            allRadios.forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // Actualizar badge
+            const statusBadge = document.getElementById('statusBadge');
+            if (statusBadge) {
+                statusBadge.className = 'badge bg-warning-subtle text-warning px-3 py-2 fs-8 fw-semibold border border-warning-subtle';
+                statusBadge.innerHTML = '<i class="bi bi-exclamation-circle"></i> Pendiente de Registro';
+            }
+        }
+    }
+    
+    // Función para mostrar notificaciones
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'success' ? 'success' : type === 'danger' ? 'danger' : 'info'} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+        notification.style.zIndex = '9999';
+        notification.style.minWidth = '250px';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+    
+    // Eventos al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateInput = document.getElementById('attendanceDate');
+        // Usar fecha local (no UTC) para evitar desfase horario
+        const now = new Date();
+        const today = now.getFullYear() + '-' +
+            String(now.getMonth() + 1).padStart(2, '0') + '-' +
+            String(now.getDate()).padStart(2, '0');
+        
+        if (dateInput) {
+            // Limitar calendario a fecha de hoy (no permitir el futuro)
+            dateInput.setAttribute('max', today);
+            
+            if (!dateInput.value || dateInput.value > today) {
+                dateInput.value = today;
+            }
+        }
+        
+        // Sincronizar datos al iniciar
+        syncAttendanceData();
+        
+        // Cambio de fecha: recargar la página vía GET para traer registros de la DB SQLite
+        if (dateInput) {
+            dateInput.addEventListener('change', function() {
+                const dateSelectForm = document.getElementById('dateSelectForm');
+                if (dateSelectForm) {
+                    dateSelectForm.submit();
+                }
+            });
+        }
+        
+        // Botón de guardar asistencia (guardar en SQLite)
+        const btnSave = document.getElementById('btnSaveAttendance');
+        if (btnSave) {
+            btnSave.addEventListener('click', saveAttendance);
+        }
+    });
+</script>
+{% endblock %}

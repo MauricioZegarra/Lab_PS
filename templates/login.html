@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AsistPro - Inicio de Sesión Administrativo">
+    <title>AsistPro - Iniciar Sesión</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Estilos Personalizados -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-body">
+
+    <div class="login-card animate-fade-in" id="loginCard">
+        <!-- Logo / Cabecera -->
+        <div class="text-center mb-4" id="loginHeader">
+            <div class="text-primary fs-1 mb-2" id="loginIcon">
+                <i class="bi bi-person-check-fill text-warning"></i>
+            </div>
+            <h3 class="fw-bold text-dark" id="loginTitle">Asist<span class="text-primary">Pro</span></h3>
+            <p class="text-muted small" id="loginSubtitle">Sistema de Registro y Control de Asistencia</p>
+        </div>
+
+        <!-- Alertas de error locales (Mensajes Flash) -->
+        <div id="localFlashContainer">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show border-0 shadow-sm mb-3 py-2 px-3 small" role="alert" id="login-alert" data-testid="flash-message">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <div>{{ message }}</div>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="padding: 0.75rem 1rem;"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- Formulario de Login -->
+        <form action="{{ url_for('login') }}" method="POST" class="needs-validation" novalidate id="loginForm">
+            
+            <!-- Campo Usuario -->
+            <div class="mb-3">
+                <label for="username" class="form-label fw-semibold text-secondary small">Usuario</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0" id="usernameAddon">
+                        <i class="bi bi-person text-muted"></i>
+                    </span>
+                    <input type="text" 
+                           class="form-control form-control-custom border-start-0" 
+                           id="username" 
+                           name="username" 
+                           placeholder="Ej. Administrador" 
+                           required 
+                           autocomplete="username"
+                           data-testid="username-input"
+                           aria-describedby="usernameAddon">
+                    <div class="invalid-feedback" id="usernameFeedback">
+                        Por favor, ingrese su nombre de usuario.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campo Contraseña -->
+            <div class="mb-4">
+                <label for="password" class="form-label fw-semibold text-secondary small">Contraseña</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0" id="passwordAddon">
+                        <i class="bi bi-key text-muted"></i>
+                    </span>
+                    <input type="password" 
+                           class="form-control form-control-custom border-start-0" 
+                           id="password" 
+                           name="password" 
+                           placeholder="••••••••" 
+                           required 
+                           autocomplete="current-password"
+                           data-testid="password-input"
+                           aria-describedby="passwordAddon">
+                    <div class="invalid-feedback" id="passwordFeedback">
+                        Por favor, ingrese su contraseña.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón de Envío -->
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary-custom py-2" id="btnLoginSubmit" data-testid="login-submit-btn">
+                    Iniciar Sesión <i class="bi bi-box-arrow-in-right ms-1"></i>
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Script de Validaciones de JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

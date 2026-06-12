@@ -1,0 +1,15 @@
+{
+  "TEST_ID": "TC-003",
+  "TIMESTAMP": "2026-06-10T23:23:49.194092",
+  "STATUS": "FAIL",
+  "INPUT": "first_name=\"---\" (solo guiones, sin letras)",
+  "EXPECTED": "Rechazo — un nombre debe contener al menos una letra",
+  "ACTUAL": "Aceptado como nombre válido — falta requisito de letras",
+  "EVIDENCE_FILES": {
+    "log": "logs/TC-003.log",
+    "response": "responses/TC-003.json"
+  },
+  "ANALYSIS": "El regex ^[a-zA-Z...\\s\\-]+$ acepta combinaciones exclusivas de sus modificadores, permitiendo nombres sin contenido alfabético.",
+  "BUG_ID": "BUG-02",
+  "SEVERITY": "P3"
+}

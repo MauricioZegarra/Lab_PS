@@ -1,0 +1,371 @@
+{% extends 'base.html' %}
+
+{% block title %}AsistPro - Gestión de Estudiantes{% endblock %}
+
+{% block content %}
+<div class="row mb-4 animate-fade-in" id="studentsPageHeader">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="h2 fw-bold text-dark mb-1" id="studentsTitle">Gestión de Estudiantes</h1>
+            <p class="text-muted mb-0" id="studentsSubtitle">Permite registrar, actualizar y dar de baja estudiantes de la institución.</p>
+        </div>
+        <div>
+            <!-- Botón para abrir modal de agregar -->
+            <button type="button" 
+                    class="btn btn-primary-custom" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#addStudentModal" 
+                    id="btnOpenAddModal"
+                    data-testid="open-add-student-modal-btn">
+                <i class="bi bi-person-plus-fill me-1"></i> Registrar Estudiante
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Tabla de listado de estudiantes -->
+<div class="row animate-fade-in" id="studentsTableContainer" style="animation-delay: 0.1s;">
+    <div class="col-12">
+        <div class="card card-custom">
+            <div class="card-body p-0">
+                {% if students %}
+                    <div class="table-responsive">
+                        <table class="table table-custom mb-0" id="studentsTable">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Apellidos</th>
+                                    <th>Nombres</th>
+                                    <th>Carrera</th>
+                                    <th>Correo Electrónico</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in students %}
+                                    <tr id="student-row-{{ student.id }}" data-testid="student-row-{{ student.student_code }}">
+                                        <td><code class="text-dark fw-bold" id="studentCode-{{ student.id }}">{{ student.student_code }}</code></td>
+                                        <td id="studentLastName-{{ student.id }}">{{ student.last_name }}</td>
+                                        <td id="studentFirstName-{{ student.id }}">{{ student.first_name }}</td>
+                                        <td><span class="badge bg-light text-dark" id="studentCareer-{{ student.id }}">{{ student.career }}</span></td>
+                                        <td id="studentEmail-{{ student.id }}">{{ student.email }}</td>
+                                        <td class="text-center">
+                                            <!-- Botón Editar que carga atributos de datos para el script JS -->
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-outline-primary me-1" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#editStudentModal"
+                                                    data-id="{{ student.id }}"
+                                                    data-code="{{ student.student_code }}"
+                                                    data-firstname="{{ student.first_name }}"
+                                                    data-lastname="{{ student.last_name }}"
+                                                    data-career="{{ student.career }}"
+                                                    data-email="{{ student.email }}"
+                                                    id="btnEdit-{{ student.student_code }}"
+                                                    data-testid="edit-student-btn-{{ student.student_code }}"
+                                                    title="Editar Estudiante">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </button>
+                                            
+                                            <!-- Formulario de Eliminación con confirmación -->
+                                            <form action="{{ url_for('delete_student', id=student.id) }}" 
+                                                  method="POST" 
+                                                  class="d-inline" 
+                                                  id="deleteForm-{{ student.student_code }}"
+                                                  onsubmit="return confirm('¿Está seguro de que desea eliminar a {{ student.full_name }}? Esta acción borrará también todo su historial de asistencia.');">
+                                                <button type="submit" 
+                                                        class="btn btn-sm btn-outline-danger" 
+                                                        id="btnDelete-{{ student.student_code }}"
+                                                        data-testid="delete-student-btn-{{ student.student_code }}"
+                                                        title="Eliminar Estudiante">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5" id="noStudentsContainer">
+                        <i class="bi bi-people text-muted fs-1 mb-2"></i>
+                        <p class="text-muted mb-0">No se encontraron estudiantes registrados en el sistema.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ======================================================= -->
+<!-- MODAL: REGISTRAR NUEVO ESTUDIANTE -->
+<!-- ======================================================= -->
+<div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card-custom border-0 shadow-lg">
+            <div class="modal-header border-bottom px-4 py-3 bg-light">
+                <h5 class="modal-title fw-bold text-primary" id="addStudentModalLabel">Registrar Nuevo Estudiante</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btnCloseAddModal"></button>
+            </div>
+            <form action="{{ url_for('add_student') }}" method="POST" class="needs-validation" novalidate id="addStudentForm">
+                <div class="modal-body p-4">
+                            <!-- Código Universitario -->
+                    <div class="mb-3">
+                        <label for="student_code" class="form-label fw-semibold text-secondary small">Código Universitario</label>
+                        <input type="text" 
+                               class="form-control form-control-custom validate-student-code" 
+                               id="student_code" 
+                               name="student_code" 
+                               placeholder="Ej. 20230456" 
+                               required
+                               minlength="8"
+                               maxlength="8"
+                               pattern="\d{8}"
+                               data-testid="add-student-code-input">
+                        <div class="invalid-feedback">
+                            El código universitario debe tener exactamente 8 dígitos numéricos.
+                        </div>
+                    </div>
+ 
+                    <!-- Nombres -->
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label fw-semibold text-secondary small">Nombres</label>
+                        <input type="text" 
+                               class="form-control form-control-custom" 
+                               id="first_name" 
+                               name="first_name" 
+                               placeholder="Ej. Juan Alberto" 
+                               required
+                               maxlength="30"
+                               pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s\-]+"
+                               data-testid="add-student-firstname-input">
+                        <div class="invalid-feedback">
+                            Por favor ingrese nombres válidos (solo letras y espacios, máx. 50 caracteres).
+                        </div>
+                    </div>
+ 
+                    <!-- Apellidos -->
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label fw-semibold text-secondary small">Apellidos</label>
+                        <input type="text" 
+                               class="form-control form-control-custom" 
+                               id="last_name" 
+                               name="last_name" 
+                               placeholder="Ej. Pérez Gómez" 
+                               required
+                               maxlength="40"
+                               pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s\-]+"
+                               data-testid="add-student-lastname-input">
+                        <div class="invalid-feedback">
+                            Por favor ingrese apellidos válidos (solo letras y espacios, máx. 75 caracteres).
+                        </div>
+                    </div>
+ 
+                    <!-- Carrera -->
+                    <div class="mb-3">
+                        <label for="career" class="form-label fw-semibold text-secondary small">Carrera Profesional</label>
+                        <select class="form-select form-control-custom" id="career" name="career" required data-testid="add-student-career-select">
+                            <option value="" disabled selected>Seleccione carrera...</option>
+                            <option value="Ciencia de la Computación">Ciencia de la Computación</option>
+                            <option value="Ingeniería de Sistemas">Ingeniería de Sistemas</option>
+                            <option value="Ingeniería Civil">Ingeniería Civil</option>
+                            <option value="Ingeniería Industrial">Ingeniería Industrial</option>
+                            <option value="Ingeniería Mecánica">Ingeniería Mecánica</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Por favor seleccione una carrera.
+                        </div>
+                    </div>
+ 
+                    <!-- Correo Electrónico -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-semibold text-secondary small">Correo Electrónico</label>
+                        <input type="email" 
+                               class="form-control form-control-custom" 
+                               id="email" 
+                               name="email" 
+                               placeholder="usuario@unsa.edu.pe" 
+                               required
+                               maxlength="120"
+                               pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,6}"
+                               data-testid="add-student-email-input">
+                        <div class="invalid-feedback">
+                            Ingrese un correo electrónico válido (ej: usuario@dominio.com).
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top bg-light px-4 py-3">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelAdd">Cancelar</button>
+                    <button type="submit" class="btn btn-primary-custom" id="btnSubmitAdd" data-testid="add-student-submit-btn">Guardar Estudiante</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ======================================================= -->
+<!-- MODAL: EDITAR ESTUDIANTE EXISTENTE -->
+<!-- ======================================================= -->
+<div class="modal fade" id="editStudentModal" tabindex="-1" aria-labelledby="editStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card-custom border-0 shadow-lg">
+            <div class="modal-header border-bottom px-4 py-3 bg-light">
+                <h5 class="modal-title fw-bold text-primary" id="editStudentModalLabel">Editar Datos del Estudiante</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btnCloseEditModal"></button>
+            </div>
+            <form action="/students/edit/0" method="POST" class="needs-validation" novalidate id="editStudentForm">
+                <div class="modal-body p-4">
+                    <!-- Campo oculto para ID -->
+                    <input type="hidden" id="edit_id" name="id">
+                    
+                    <!-- Código Universitario -->
+                    <div class="mb-3">
+                        <label for="edit_student_code" class="form-label fw-semibold text-secondary small">Código Universitario</label>
+                        <input type="text" 
+                               class="form-control form-control-custom validate-student-code" 
+                               id="edit_student_code" 
+                               name="student_code" 
+                               required
+                               minlength="8"
+                               maxlength="8"
+                               pattern="\d{8}"
+                               data-testid="edit-student-code-input">
+                        <div class="invalid-feedback">
+                            El código universitario debe tener exactamente 8 dígitos numéricos.
+                        </div>
+                    </div>
+ 
+                    <!-- Nombres -->
+                    <div class="mb-3">
+                        <label for="edit_first_name" class="form-label fw-semibold text-secondary small">Nombres</label>
+                        <input type="text" 
+                               class="form-control form-control-custom" 
+                               id="edit_first_name" 
+                               name="first_name" 
+                               required
+                               maxlength="50"
+                               pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s\-]+"
+                               data-testid="edit-student-firstname-input">
+                        <div class="invalid-feedback">
+                            Por favor ingrese nombres válidos (solo letras y espacios, máx. 50 caracteres).
+                        </div>
+                    </div>
+ 
+                    <!-- Apellidos -->
+                    <div class="mb-3">
+                        <label for="edit_last_name" class="form-label fw-semibold text-secondary small">Apellidos</label>
+                        <input type="text" 
+                               class="form-control form-control-custom" 
+                               id="edit_last_name" 
+                               name="last_name" 
+                               required
+                               maxlength="75"
+                               pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s\-]+"
+                               data-testid="edit-student-lastname-input">
+                        <div class="invalid-feedback">
+                            Por favor ingrese apellidos válidos (solo letras y espacios, máx. 75 caracteres).
+                        </div>
+                    </div>
+ 
+                    <!-- Carrera -->
+                    <div class="mb-3">
+                        <label for="edit_career" class="form-label fw-semibold text-secondary small">Carrera Profesional</label>
+                        <select class="form-select form-control-custom" id="edit_career" name="career" required data-testid="edit-student-career-select">
+                            <option value="Ciencia de la Computación">Ciencia de la Computación</option>
+                            <option value="Ingeniería de Sistemas">Ingeniería de Sistemas</option>
+                            <option value="Ingeniería Civil">Ingeniería Civil</option>
+                            <option value="Ingeniería Industrial">Ingeniería Industrial</option>
+                            <option value="Ingeniería Mecánica">Ingeniería Mecánica</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Por favor seleccione una carrera.
+                        </div>
+                    </div>
+ 
+                    <!-- Correo Electrónico -->
+                    <div class="mb-3">
+                        <label for="edit_email" class="form-label fw-semibold text-secondary small">Correo Electrónico</label>
+                        <input type="email" 
+                               class="form-control form-control-custom" 
+                               id="edit_email" 
+                               name="email" 
+                               required
+                               maxlength="120"
+                               pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,6}"
+                               data-testid="edit-student-email-input">
+                        <div class="invalid-feedback">
+                            Ingrese un correo electrónico válido (ej: usuario@dominio.com).
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top bg-light px-4 py-3">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelEdit">Cancelar</button>
+                    <button type="submit" class="btn btn-primary-custom" id="btnSubmitEdit" data-testid="edit-student-submit-btn">Actualizar Estudiante</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // ── Rellenar modal EDITAR al hacer clic en el botón ──────────────
+        const editModal = document.getElementById('editStudentModal');
+        editModal.addEventListener('show.bs.modal', function (event) {
+            const btn = event.relatedTarget; // Botón que disparó el modal
+
+            const id        = btn.getAttribute('data-id');
+            const code      = btn.getAttribute('data-code');
+            const firstName = btn.getAttribute('data-firstname');
+            const lastName  = btn.getAttribute('data-lastname');
+            const career    = btn.getAttribute('data-career');
+            const email     = btn.getAttribute('data-email');
+
+            // Actualizar el action del formulario con el ID real del estudiante
+            document.getElementById('editStudentForm').action = '/students/edit/' + id;
+
+            // Rellenar los campos
+            document.getElementById('edit_id').value           = id;
+            document.getElementById('edit_student_code').value = code;
+            document.getElementById('edit_first_name').value   = firstName;
+            document.getElementById('edit_last_name').value    = lastName;
+            document.getElementById('edit_email').value        = email;
+
+            // Seleccionar la carrera correcta en el <select>
+            const careerSelect = document.getElementById('edit_career');
+            for (let opt of careerSelect.options) {
+                opt.selected = (opt.value === career);
+            }
+
+            // Limpiar estado de validación previo al abrir
+            document.getElementById('editStudentForm').classList.remove('was-validated');
+        });
+
+        // ── Limpiar modal AGREGAR al cerrar ──────────────────────────────
+        document.getElementById('addStudentModal').addEventListener('hidden.bs.modal', function () {
+            document.getElementById('addStudentForm').reset();
+            document.getElementById('addStudentForm').classList.remove('was-validated');
+        });
+
+        // ── Validación Bootstrap para formulario AGREGAR ──────────────────
+        document.getElementById('addStudentForm').addEventListener('submit', function (e) {
+            if (!this.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            this.classList.add('was-validated');
+        });
+
+        // ── Validación Bootstrap para formulario EDITAR ───────────────────
+        document.getElementById('editStudentForm').addEventListener('submit', function (e) {
+            if (!this.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            this.classList.add('was-validated');
+        });
+    });
+</script>
+{% endblock %}

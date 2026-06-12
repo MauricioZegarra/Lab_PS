@@ -1,0 +1,13 @@
+{
+  "TEST_ID": "TC-013",
+  "TIMESTAMP": "2026-06-10T23:23:52.940448",
+  "STATUS": "PASS",
+  "INPUT": "POST /students/edit/2 con student_code=\"20210001\" (de otro estudiante)",
+  "EXPECTED": "Error de colisión — actualización rechazada",
+  "ACTUAL": "Colisión prevenida — el ORM detectó duplicado",
+  "EVIDENCE_FILES": {
+    "log": "logs/TC-013.log",
+    "response": "responses/TC-013.json"
+  },
+  "ANALYSIS": "El sistema verifica Student.id != id antes de aceptar el código, previniendo colisiones en la edición."
+}

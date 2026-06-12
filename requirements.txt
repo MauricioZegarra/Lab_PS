@@ -1,0 +1,7 @@
+# ── Aplicación principal (Flask + BD) ──────────────────────────
+Flask>=3.0.0
+Flask-SQLAlchemy>=3.1.0
+Werkzeug>=3.0.0
+
+# ── Suite de pruebas automatizadas ─────────────────────────────
+pytest>=8.0.0

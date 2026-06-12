@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}AsistPro - Error del Servidor{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center py-5 animate-fade-in" id="error500Container">
+    <div class="col-12 col-md-6 text-center">
+        <div class="display-1 fw-bold text-warning mb-3" id="error500Code">
+            <i class="bi bi-shield-slash-fill"></i> 500
+        </div>
+        <h2 class="fw-bold text-dark mb-3" id="error500Title">Error Interno del Servidor</h2>
+        <p class="text-muted mb-4" id="error500Message">
+            Ocurrió un error inesperado al procesar su solicitud. Por favor, intente de nuevo más tarde o comuníquese con el administrador del sistema.
+        </p>
+        <a href="{{ url_for('index') }}" class="btn btn-primary-custom" id="btnRetryHome" data-testid="retry-home-btn">
+            <i class="bi bi-arrow-repeat me-1"></i> Reintentar e Ir al Inicio
+        </a>
+    </div>
+</div>
+{% endblock %}

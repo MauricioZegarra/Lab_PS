@@ -1,0 +1,466 @@
+/* AsistPro - Sistema de Registro y Control de Asistencia */
+/* Estilos personalizados con diseño premium universitario */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --primary-color: #0f172a;       /* Slate 900 */
+    --primary-light: #1e293b;       /* Slate 800 */
+    --secondary-color: #0284c7;     /* Sky 600 */
+    --accent-color: #eab308;        /* Amber 500 */
+    --bg-light: #f8fafc;            /* Slate 50 */
+    --card-bg: #ffffff;
+    --text-main: #334155;           /* Slate 700 */
+    --text-muted: #64748b;          /* Slate 500 */
+    --border-color: #e2e8f0;        /* Slate 200 */
+    
+    /* Attendance Colors */
+    --status-presente-bg: #dcfce7;  /* Emerald 100 */
+    --status-presente-text: #15803d;/* Emerald 700 */
+    --status-tardanza-bg: #fef9c3;  /* Yellow 100 */
+    --status-tardanza-text: #a16207;/* Yellow 700 */
+    --status-falta-bg: #fee2e2;     /* Red 100 */
+    --status-falta-text: #b91c1c;   /* Red 700 */
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --border-radius: 12px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Base Page Wrapper */
+.main-wrapper {
+    flex: 1;
+    padding: 2rem 0;
+}
+
+/* Navbar Premium Styling */
+.navbar-custom {
+    background-color: var(--primary-color) !important;
+    box-shadow: var(--shadow-md);
+    padding: 0.85rem 1.5rem;
+}
+
+.navbar-custom .navbar-brand {
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #ffffff !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-custom .nav-link {
+    color: #cbd5e1 !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: 6px;
+    transition: var(--transition-smooth);
+}
+
+.navbar-custom .nav-link:hover, 
+.navbar-custom .nav-link.active {
+    color: #ffffff !important;
+    background-color: var(--primary-light);
+}
+
+.navbar-custom .navbar-brand .accent-text {
+    color: var(--accent-color);
+}
+
+/* Login Glassmorphism Styles */
+.login-body {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1.5rem;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 440px;
+    transition: var(--transition-smooth);
+}
+
+.login-card:hover {
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Card General Styling */
+.card-custom {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-smooth);
+    overflow: hidden;
+}
+
+.card-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-header-custom {
+    background-color: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header-custom h5 {
+    margin: 0;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Form Styles */
+.form-control-custom {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    font-size: 0.95rem;
+    transition: var(--transition-smooth);
+}
+
+.form-control-custom:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.15);
+    outline: 0;
+}
+
+/* Button Custom Styles */
+.btn-primary-custom {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: white;
+    font-weight: 600;
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    transition: var(--transition-smooth);
+}
+
+.btn-primary-custom:hover {
+    background-color: #0270a9;
+    border-color: #0270a9;
+    color: white;
+}
+
+.btn-danger-custom {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    color: white;
+    font-weight: 600;
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    transition: var(--transition-smooth);
+}
+
+.btn-danger-custom:hover {
+    background-color: #dc2626;
+    border-color: #dc2626;
+    color: white;
+}
+
+/* Badges de Asistencia */
+.status-badge {
+    padding: 0.35em 0.85em;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    display: inline-block;
+}
+
+.status-presente {
+    background-color: var(--status-presente-bg);
+    color: var(--status-presente-text);
+}
+
+.status-tardanza {
+    background-color: var(--status-tardanza-bg);
+    color: var(--status-tardanza-text);
+}
+
+.status-falta {
+    background-color: var(--status-falta-bg);
+    color: var(--status-falta-text);
+}
+
+/* Modern Tables */
+.table-custom {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.table-custom th {
+    background-color: var(--bg-light);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border-color);
+    padding: 1rem 1.5rem;
+}
+
+.table-custom td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
+
+.table-custom tbody tr {
+    transition: var(--transition-smooth);
+}
+
+.table-custom tbody tr:hover {
+    background-color: rgba(241, 245, 249, 0.5);
+}
+
+/* Dashboard Metric Cards */
+.metric-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    transition: var(--transition-smooth);
+}
+
+.metric-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.metric-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.metric-data h3 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.metric-data p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Custom CSS Progress bars (Simple for reports) */
+.custom-progress {
+    height: 10px;
+    border-radius: 999px;
+    background-color: var(--border-color);
+    overflow: hidden;
+}
+
+.custom-progress-bar {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.6s ease;
+}
+
+/* Footer Styling */
+footer {
+    background-color: var(--primary-color);
+    color: #94a3b8;
+    padding: 1.5rem 0;
+    font-size: 0.875rem;
+    border-top: 1px solid var(--primary-light);
+}
+
+footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+footer a:hover {
+    color: #ffffff;
+}
+
+/* Radio buttons customization for attendance register */
+.attendance-radio-group {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.attendance-radio-btn {
+    position: relative;
+    cursor: pointer;
+    flex: 1;
+}
+
+.attendance-radio-btn input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.attendance-radio-btn span {
+    display: block;
+    text-align: center;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: var(--transition-smooth);
+}
+
+/* Hover & checked styles for present */
+.radio-presente:hover span,
+.attendance-radio-btn input[type="radio"]:checked + .radio-presente span {
+    background-color: var(--status-presente-bg);
+    color: var(--status-presente-text);
+    border-color: #86efac;
+}
+
+/* Hover & checked styles for tardanza */
+.radio-tardanza:hover span,
+.attendance-radio-btn input[type="radio"]:checked + .radio-tardanza span {
+    background-color: var(--status-tardanza-bg);
+    color: var(--status-tardanza-text);
+    border-color: #fef08a;
+}
+
+/* Hover & checked styles for falta */
+.radio-falta:hover span,
+.attendance-radio-btn input[type="radio"]:checked + .radio-falta span {
+    background-color: var(--status-falta-bg);
+    color: var(--status-falta-text);
+    border-color: #fecaca;
+}
+/* ================================================ */
+/* ESTILOS DE BOTONES DE ASISTENCIA - AGREGAR AL FINAL */
+/* ================================================ */
+
+.attendance-radio-group {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+}
+
+.attendance-radio-btn {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.attendance-radio-btn input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.attendance-radio-btn span {
+    display: inline-flex;
+    width: 48px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+/* PRESENTE - VERDE */
+.radio-presente {
+    background-color: #dcfce7;
+    color: #15803d;
+    border: 2px solid #86efac;
+}
+
+.attendance-radio-btn input:checked + .radio-presente {
+    background-color: #10b981;
+    color: white;
+    border-color: #10b981;
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+/* TARDANZA - NARANJA */
+.radio-tardanza {
+    background-color: #fef9c3;
+    color: #a16207;
+    border: 2px solid #fef08a;
+}
+
+.attendance-radio-btn input:checked + .radio-tardanza {
+    background-color: #f59e0b;
+    color: white;
+    border-color: #f59e0b;
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+/* FALTA - ROJO */
+.radio-falta {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 2px solid #fecaca;
+}
+
+.attendance-radio-btn input:checked + .radio-falta {
+    background-color: #ef4444;
+    color: white;
+    border-color: #ef4444;
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+/* Efecto hover */
+.attendance-radio-btn:hover span {
+    transform: scale(1.05);
+}

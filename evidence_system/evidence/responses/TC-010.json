@@ -1,0 +1,15 @@
+{
+  "TEST_ID": "TC-010",
+  "TIMESTAMP": "2026-06-10T23:23:54.044348",
+  "STATUS": "FAIL",
+  "INPUT": "POST /students/delete/1 sin token CSRF",
+  "EXPECTED": "HTTP 403 Forbidden — token CSRF ausente o inválido",
+  "ACTUAL": "Estudiante eliminado exitosamente sin token CSRF — vulnerabilidad confirmada",
+  "EVIDENCE_FILES": {
+    "log": "logs/TC-010.log",
+    "response": "responses/TC-010.json"
+  },
+  "ANALYSIS": "Los formularios POST del sistema carecen completamente de protección CSRF (no usan Flask-WTF ni csrf_token()). Cualquier sitio externo puede ejecutar operaciones destructivas aprovechando la sesión activa.",
+  "BUG_ID": "BUG-06",
+  "SEVERITY": "P1"
+}

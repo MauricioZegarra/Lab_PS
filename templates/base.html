@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AsistPro - Sistema Universitario de Control y Registro de Asistencias">
+    <meta name="author" content="AsistPro Team">
+    <title>{% block title %}AsistPro - Control de Asistencia{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Estilos Personalizados -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Barra de Navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom" id="mainNavbar">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}" id="brandLogo">
+                <i class="bi bi-person-check-fill text-warning"></i>
+                <span>Asist<span class="accent-text">Pro</span></span>
+            </a>
+            
+            {% if session.get('user_id') %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation" id="navbarTogglerBtn">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('dashboard') %}active{% endif %}" href="{{ url_for('dashboard') }}" id="navLinkDashboard">
+                            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('students') %}active{% endif %}" href="{{ url_for('students') }}" id="navLinkStudents">
+                            <i class="bi bi-people-fill me-1"></i> Estudiantes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('attendance') %}active{% endif %}" href="{{ url_for('attendance') }}" id="navLinkAttendance">
+                            <i class="bi bi-calendar-check-fill me-1"></i> Registrar Asistencia
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('reports') %}active{% endif %}" href="{{ url_for('reports') }}" id="navLinkReports">
+                            <i class="bi bi-graph-up-arrow me-1"></i> Reportes
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-light fs-7" id="currentUserDisplay">
+                        <i class="bi bi-person-circle text-muted me-1"></i> {% if session.get('username')|lower == 'admin' %}Administrador{% else %}{{ session.get('username') }}{% endif %}
+                    </span>
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline-light btn-sm px-3" id="btnLogout" data-testid="logout-btn">
+                        <i class="bi bi-box-arrow-right"></i> Salir
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Contenido Principal y Notificaciones Flash -->
+    <div class="main-wrapper">
+        <div class="container">
+            <!-- Contenedor de Alertas / Mensajes Flash -->
+            <div id="flashMessagesContainer">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show card-custom border-0 shadow-sm mb-4 animate-fade-in" role="alert" id="alert-{{ loop.index }}" data-testid="flash-message">
+                                <div class="d-flex align-items-center">
+                                    {% if category == 'success' %}
+                                        <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                                    {% elif category == 'danger' %}
+                                        <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                                    {% elif category == 'warning' %}
+                                        <i class="bi bi-exclamation-circle-fill me-2 fs-5"></i>
+                                    {% else %}
+                                        <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                                    {% endif %}
+                                    <div>{{ message }}</div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" id="alertClose-{{ loop.index }}"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Bloque de contenido dinámico -->
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto" id="mainFooter">
+        <div class="container text-center">
+            <p class="mb-1" id="footerText">&copy; 2026 <strong>AsistPro</strong>. Sistema Universitario de Registro y Control de Asistencia.</p>
+            <p class="mb-0 text-muted fs-8">Desarrollado para Ingeniería de Software y QA.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS (incluye Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Scripts Propios del Proyecto -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

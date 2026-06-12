@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block title %}AsistPro - Dashboard{% endblock %}
+
+{% block content %}
+<div class="row mb-4 animate-fade-in" id="dashboardWelcomeSection">
+    <div class="col-12">
+        <div class="d-md-flex align-items-center justify-content-between">
+            <div>
+                <h1 class="h2 fw-bold text-dark mb-1" id="welcomeTitle">Panel de Control</h1>
+                <p class="text-muted mb-md-0" id="welcomeSubtitle">
+                    Resumen general y métricas del sistema para el control de asistencia.
+                </p>
+            </div>
+            <div class="text-md-end" id="currentDateBadge">
+                <span class="badge bg-white text-primary border border-primary px-3 py-2 fs-7 fw-semibold">
+                    <i class="bi bi-clock-fill me-1 text-warning"></i> Fecha: {{ today | datetime_format('%d de %B, %Y') }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grid de Métricas Principales -->
+<div class="row g-4 mb-5 animate-fade-in" id="metricsGrid" style="animation-delay: 0.1s;">
+    <!-- Tarjeta: Total Estudiantes -->
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="metric-card card-custom" id="metricCardStudents" data-testid="metric-students">
+            <div class="metric-icon bg-primary-subtle text-primary" id="metricIconStudents">
+                <i class="bi bi-people-fill"></i>
+            </div>
+            <div class="metric-data">
+                <h3 id="statTotalStudents" data-testid="stat-total-students">{{ total_students }}</h3>
+                <p>Estudiantes</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tarjeta: Registro de Hoy -->
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="metric-card card-custom" id="metricCardToday" data-testid="metric-today">
+            <div class="metric-icon bg-info-subtle text-info" id="metricIconToday">
+                <i class="bi bi-calendar-day"></i>
+            </div>
+            <div class="metric-data">
+                <h3 id="statTodayRegistered" data-testid="stat-today-registered">{{ today_registered }} / {{ total_students }}</h3>
+                <p>Registros de Hoy</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tarjeta: Detalle de Hoy -->
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="metric-card card-custom" id="metricCardDetails" data-testid="metric-details">
+            <div class="metric-icon bg-success-subtle text-success" id="metricIconDetails">
+                <i class="bi bi-clipboard-check"></i>
+            </div>
+            <div class="metric-data">
+                <h3 class="fs-5 fw-bold" id="statTodayStatus">
+                    <span class="text-success" data-testid="stat-today-present">{{ present_today }} P</span> | 
+                    <span class="text-warning" data-testid="stat-today-tardy">{{ tardy_today }} T</span> | 
+                    <span class="text-danger" data-testid="stat-today-absent">{{ absent_today }} F</span>
+                </h3>
+                <p>Estados de Hoy</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tarjeta: Promedio General -->
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="metric-card card-custom" id="metricCardRate" data-testid="metric-rate">
+            <div class="metric-icon bg-warning-subtle text-warning" id="metricIconRate">
+                <i class="bi bi-graph-up-arrow"></i>
+            </div>
+            <div class="metric-data">
+                <h3 id="statGlobalRate" data-testid="stat-global-rate">{% if global_attendance_rate == '-' %}-{% else %}{{ global_attendance_rate }}%{% endif %}</h3>
+                <p>Asistencia General</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4 animate-fade-in" id="dashboardDetailsGrid" style="animation-delay: 0.2s;">
+    <!-- Columna Izquierda: Acciones Rápidas y Estadísticas -->
+    <div class="col-12 col-lg-6">
+        <div class="card card-custom h-100" id="quickActionsCard">
+            <div class="card-header-custom" id="quickActionsHeader">
+                <h5><i class="bi bi-lightning-charge-fill text-warning me-1"></i> Acciones Rápidas</h5>
+            </div>
+            <div class="card-body p-4" id="quickActionsBody">
+                <p class="text-muted mb-4">Acceda directamente a las principales funcionalidades del sistema:</p>
+                
+                <div class="d-grid gap-3">
+                    <a href="{{ url_for('attendance') }}" class="btn btn-outline-primary d-flex align-items-center justify-content-between p-3 border-2" id="actionBtnAttendance" data-testid="action-register-attendance-btn">
+                        <div class="text-start">
+                            <h6 class="fw-bold mb-1">Registrar Asistencia Diaria</h6>
+                            <small class="text-muted">Marque la asistencia para la fecha de hoy u otra fecha seleccionada.</small>
+                        </div>
+                        <i class="bi bi-calendar-check fs-4"></i>
+                    </a>
+
+                    <a href="{{ url_for('students') }}" class="btn btn-outline-secondary d-flex align-items-center justify-content-between p-3 border-2" id="actionBtnStudents" data-testid="action-manage-students-btn">
+                        <div class="text-start">
+                            <h6 class="fw-bold mb-1">Gestionar Alumnado</h6>
+                            <small class="text-muted">Agregue, edite datos o elimine estudiantes del sistema universitario.</small>
+                        </div>
+                        <i class="bi bi-people fs-4"></i>
+                    </a>
+
+                    <a href="{{ url_for('reports') }}" class="btn btn-outline-info d-flex align-items-center justify-content-between p-3 border-2" id="actionBtnReports" data-testid="action-view-reports-btn">
+                        <div class="text-start">
+                            <h6 class="fw-bold mb-1">Ver Reportes e Historial</h6>
+                            <small class="text-muted">Consulte porcentajes de asistencia por alumno y logs históricos.</small>
+                        </div>
+                        <i class="bi bi-file-earmark-bar-graph fs-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Columna Derecha: Estudiantes Nuevos -->
+    <div class="col-12 col-lg-6">
+        <div class="card card-custom h-100" id="recentStudentsCard">
+            <div class="card-header-custom" id="recentStudentsHeader">
+                <h5><i class="bi bi-clock-history text-primary me-1"></i> Últimos Estudiantes Registrados</h5>
+                <a href="{{ url_for('students') }}" class="btn btn-link btn-sm text-decoration-none fw-bold" id="btnLinkAllStudents">Ver Todos</a>
+            </div>
+            <div class="card-body p-0" id="recentStudentsBody">
+                {% if recent_students %}
+                    <div class="table-responsive">
+                        <table class="table table-custom mb-0" id="recentStudentsTable">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Carrera</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in recent_students %}
+                                    <tr data-testid="recent-student-row-{{ student.student_code }}">
+                                        <td><code class="text-dark fw-bold">{{ student.student_code }}</code></td>
+                                        <td>{{ student.full_name }}</td>
+                                        <td><span class="badge bg-light text-dark">{{ student.career }}</span></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5" id="noStudentsMsg">
+                        <i class="bi bi-people text-muted fs-1 mb-2"></i>
+                        <p class="text-muted mb-0">No hay estudiantes registrados en el sistema.</p>
+                        <a href="{{ url_for('students') }}" 
+                           class="btn btn-sm btn-primary-custom mt-3"
+                           onclick="sessionStorage.setItem('openAddModal','1')"
+                        >Registrar Primer Estudiante</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

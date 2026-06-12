@@ -1,0 +1,15 @@
+{
+  "TEST_ID": "TC-009",
+  "TIMESTAMP": "2026-06-10T23:23:52.497567",
+  "STATUS": "FAIL",
+  "INPUT": "career=\"Ingeniería de Hacking\" vía manipulación DOM/POST",
+  "EXPECTED": "Rechazo — valor fuera del catálogo institucional de carreras",
+  "ACTUAL": "Estudiante creado con career=\"Ingeniería de Hacking\" — backend no valida enum",
+  "EVIDENCE_FILES": {
+    "log": "logs/TC-009.log",
+    "response": "responses/TC-009.json"
+  },
+  "ANALYSIS": "El backend usa validate_name() para carreras, que solo verifica formato de texto y longitud. No existe validación de pertenencia a un catálogo (Enum) definido.",
+  "BUG_ID": "BUG-05",
+  "SEVERITY": "P3"
+}

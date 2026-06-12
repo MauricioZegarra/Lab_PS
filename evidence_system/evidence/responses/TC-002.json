@@ -1,0 +1,15 @@
+{
+  "TEST_ID": "TC-002",
+  "TIMESTAMP": "2026-06-10T23:23:48.972272",
+  "STATUS": "FAIL",
+  "INPUT": "student_code=\"٢٠٢١٠٠١٢\" (dígitos árabes Unicode)",
+  "EXPECTED": "Rechazo — solo dígitos ASCII [0-9] válidos",
+  "ACTUAL": "Aceptado por .isdigit() — bypass Unicode confirmado",
+  "EVIDENCE_FILES": {
+    "log": "logs/TC-002.log",
+    "response": "responses/TC-002.json"
+  },
+  "ANALYSIS": "Python .isdigit() retorna True para caracteres Unicode categoría Nd, incluyendo dígitos árabes, hindúes, etc. Esto permite corromper IDs.",
+  "BUG_ID": "BUG-01",
+  "SEVERITY": "P2"
+}

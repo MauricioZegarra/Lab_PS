@@ -1,0 +1,13 @@
+{
+  "TEST_ID": "TC-005",
+  "TIMESTAMP": "2026-06-10T23:23:49.630103",
+  "STATUS": "PASS",
+  "INPUT": "date=\"25-05-2024\" (formato DD-MM-YYYY)",
+  "EXPECTED": "Rechazo o redirección segura a fecha actual",
+  "ACTUAL": "HTTP 200 — redirección segura ejecutada",
+  "EVIDENCE_FILES": {
+    "log": "logs/TC-005.log",
+    "response": "responses/TC-005.json"
+  },
+  "ANALYSIS": "El bloque try/except en app.py:498 captura el ValueError y redirige a la fecha actual sin crashear."
+}

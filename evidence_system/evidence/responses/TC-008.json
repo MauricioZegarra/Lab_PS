@@ -1,0 +1,13 @@
+{
+  "TEST_ID": "TC-008",
+  "TIMESTAMP": "2026-06-10T23:23:51.407625",
+  "STATUS": "PASS",
+  "INPUT": "page=999999999 en GET /reports",
+  "EXPECTED": "HTTP 200 — tabla vacía, sin crasheo por offset SQL",
+  "ACTUAL": "HTTP 200 — tabla vacía sin error de servidor",
+  "EVIDENCE_FILES": {
+    "log": "logs/TC-008.log",
+    "response": "responses/TC-008.json"
+  },
+  "ANALYSIS": "SQLAlchemy resuelve el offset fuera de rango retornando una lista vacía. La interfaz renderiza la tabla correctamente sin excepciones."
+}

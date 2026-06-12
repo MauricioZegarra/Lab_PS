@@ -1,0 +1,15 @@
+{
+  "TEST_ID": "TC-012",
+  "TIMESTAMP": "2026-06-10T23:23:52.717805",
+  "STATUS": "FAIL",
+  "INPUT": "first_name=\"A\"*50 (50 chars)",
+  "EXPECTED": "Guardado exitoso — el límite backend es 50",
+  "ACTUAL": "Backend acepta 50 chars por POST directo, pero el HTML usa maxlength restrictivo que bloquea al usuario",
+  "EVIDENCE_FILES": {
+    "log": "logs/TC-012.log",
+    "response": "responses/TC-012.json"
+  },
+  "ANALYSIS": "El formulario HTML restringe el campo con maxlength inferior al valor real aceptado por el backend, impidiendo a usuarios legítimos registrar nombres completos.",
+  "BUG_ID": "BUG-08",
+  "SEVERITY": "P3"
+}

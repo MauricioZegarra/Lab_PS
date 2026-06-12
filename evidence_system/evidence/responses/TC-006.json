@@ -1,0 +1,15 @@
+{
+  "TEST_ID": "TC-006",
+  "TIMESTAMP": "2026-06-10T23:23:50.719529",
+  "STATUS": "FAIL",
+  "INPUT": "attendance_date=\"0001-01-01\" (límite inferior absoluto)",
+  "EXPECTED": "Rechazo — fecha fuera de rango operativo razonable",
+  "ACTUAL": "Aceptado — no existe límite temporal inferior",
+  "EVIDENCE_FILES": {
+    "log": "logs/TC-006.log",
+    "response": "responses/TC-006.json"
+  },
+  "ANALYSIS": "validate_date_not_future() solo verifica date <= today. No existe umbral mínimo, permitiendo fechas históricamente absurdas.",
+  "BUG_ID": "BUG-04",
+  "SEVERITY": "P3"
+}

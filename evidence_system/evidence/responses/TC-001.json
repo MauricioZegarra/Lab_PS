@@ -1,0 +1,13 @@
+{
+  "TEST_ID": "TC-001",
+  "TIMESTAMP": "2026-06-10T23:23:48.765475",
+  "STATUS": "PASS",
+  "INPUT": "['user@dom!ain.com', 'user@domain@com.pe']",
+  "EXPECTED": "Rechazo — formato RFC inválido",
+  "ACTUAL": "Rechazado correctamente por el regex",
+  "EVIDENCE_FILES": {
+    "log": "logs/TC-001.log",
+    "response": "responses/TC-001.json"
+  },
+  "ANALYSIS": "El regex del backend descarta correctamente caracteres ! y doble @."
+}

@@ -1,0 +1,390 @@
+{% extends 'base.html' %}
+
+{% block title %}AsistPro - Reportes de Asistencia{% endblock %}
+
+{% block content %}
+<div class="row mb-4 animate-fade-in">
+    <div class="col-12">
+        <h1 class="h2 fw-bold text-dark mb-1">Reportes y Estadísticas</h1>
+        <p class="text-muted mb-0">Consulte el rendimiento académico, estadísticas globales y el historial de registros.</p>
+    </div>
+</div>
+
+<!-- Resumen Estadístico Global -->
+<div class="row g-4 mb-5 animate-fade-in">
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card card-custom p-3 border-start border-4 border-success h-100">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h6 class="text-muted small fw-semibold mb-1">Total de Presentes</h6>
+                    <h3 class="fw-bold mb-0 text-success" id="overallPresentCount">0</h3>
+                </div>
+                <div class="fs-1 text-success opacity-50"><i class="bi bi-person-check-fill"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card card-custom p-3 border-start border-4 border-warning h-100">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h6 class="text-muted small fw-semibold mb-1">Total de Tardanzas</h6>
+                    <h3 class="fw-bold mb-0 text-warning" id="overallTardyCount">0</h3>
+                </div>
+                <div class="fs-1 text-warning opacity-50"><i class="bi bi-clock-fill"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card card-custom p-3 border-start border-4 border-danger h-100">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h6 class="text-muted small fw-semibold mb-1">Total de Faltas</h6>
+                    <h3 class="fw-bold mb-0 text-danger" id="overallAbsentCount">0</h3>
+                </div>
+                <div class="fs-1 text-danger opacity-50"><i class="bi bi-person-x-fill"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+        <div class="card card-custom p-3 border-start border-4 border-primary h-100">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h6 class="text-muted small fw-semibold mb-1">Promedio de Asistencia</h6>
+                    <h3 class="fw-bold mb-0 text-primary" id="overallAvgRate">0%</h3>
+                </div>
+                <div class="fs-1 text-primary opacity-50"><i class="bi bi-percent"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pestañas -->
+<div class="row animate-fade-in">
+    <div class="col-12">
+        <div class="card card-custom mb-5">
+            <div class="card-header bg-white border-bottom p-0">
+                <ul class="nav nav-tabs border-0" id="reportTabs" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link py-3 px-4 fw-bold" id="students-tab" data-bs-toggle="tab" data-bs-target="#students-content" type="button" role="tab">
+                            <i class="bi bi-people-fill me-1"></i> Porcentaje de Asistencia
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link active py-3 px-4 fw-bold" id="history-tab" data-bs-toggle="tab" data-bs-target="#history-content" type="button" role="tab">
+                            <i class="bi bi-clock-history me-1"></i> Historial
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="tab-content" id="reportTabsContent">
+                <!-- Pestaña Estadísticas -->
+                <div class="tab-pane fade p-4" id="students-content" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-custom align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Estudiante</th>
+                                    <th class="text-center">Total</th>
+                                    <th class="text-center text-success">P</th>
+                                    <th class="text-center text-warning">T</th>
+                                    <th class="text-center text-danger">F</th>
+                                    <th>% Asistencia</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsStatsBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Pestaña Historial -->
+                <div class="tab-pane fade show active p-4" id="history-content" role="tabpanel">
+                    <div class="row g-3 mb-4">
+                        <div class="col-12 col-md-5">
+                            <label class="form-label fw-semibold text-secondary small">Buscar Estudiante (Código o Nombre)</label>
+                            <input type="text" class="form-control form-control-custom" id="searchCode" placeholder="Ej. 20210012 o Carlos">
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <label class="form-label fw-semibold text-secondary small">Filtrar por Fecha</label>
+                            <input type="date" class="form-control form-control-custom" id="searchDate" value="{{ filter_date }}" max="{{ today.isoformat() }}">
+                        </div>
+                        <div class="col-12 col-md-3 d-flex align-items-end">
+                            <div class="w-100 d-flex gap-2">
+                                <button class="btn btn-primary-custom flex-grow-1" id="btnSearch">
+                                    <i class="bi bi-search me-1"></i> Buscar
+                                </button>
+                                <button class="btn btn-outline-secondary" id="btnClearFilters" type="button">
+                                    <i class="bi bi-arrow-counterclockwise"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-custom align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Código</th>
+                                    <th>Estudiante</th>
+                                    <th>Carrera</th>
+                                    <th class="text-center">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-muted">
+                                        <i class="bi bi-search d-block fs-2 mb-2"></i>
+                                        Haga clic en "Buscar" para ver los registros
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // REPORTES — Datos 100% desde la Base de Datos (via Flask/Jinja)
+    // No se usa localStorage para estadísticas ni historial.
+    // Esto evita el bug donde nuevos estudiantes "heredaban"
+    // registros de asistencia de IDs anteriores almacenados en caché.
+    // ============================================================
+
+    // Estadísticas por estudiante (desde BD)
+    const studentStatsData = {{ student_stats_json | safe }};
+
+    // Historial de registros (desde BD, paginado)
+    const historyData = {{ history_json | safe }};
+
+    // Contadores globales (desde BD, pasados por Flask)
+    const overallPresent = {{ overall_present }};
+    const overallTardy  = {{ overall_tardy }};
+    const overallAbsent = {{ overall_absent }};
+    const globalAvg     = {{ global_avg if global_avg != '-' else '"—"' }};
+
+    // ──────────────────────────────────────────────
+    // Estadísticas globales — datos reales de BD
+    // ──────────────────────────────────────────────
+    function updateGlobalStats() {
+        document.getElementById('overallPresentCount').innerText = overallPresent;
+        document.getElementById('overallTardyCount').innerText   = overallTardy;
+        document.getElementById('overallAbsentCount').innerText  = overallAbsent;
+        const avgEl = document.getElementById('overallAvgRate');
+        if (avgEl) {
+            avgEl.innerText = (typeof globalAvg === 'number') ? globalAvg + '%' : globalAvg;
+        }
+    }
+
+    // ──────────────────────────────────────────────
+    // Tabla de porcentaje de asistencia por alumno
+    // ──────────────────────────────────────────────
+    function renderStudentStats() {
+        const tbody = document.getElementById('studentsStatsBody');
+        if (!tbody) return;
+
+        if (studentStatsData.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">' +
+                '<i class="bi bi-people d-block fs-2 mb-2"></i>' +
+                'No hay registros de asistencia aún.</td></tr>';
+            return;
+        }
+
+        const rows = studentStatsData.map(function(s) {
+            let rate = s.rate;
+            let colorClass = 'bg-success';
+            if (s.total === 0) {
+                rate = 0;
+            }
+            if (rate < 70) colorClass = 'bg-danger';
+            else if (rate < 85) colorClass = 'bg-warning';
+
+            return '<tr>' +
+                '<td><code class="text-dark fw-bold">' + s.student_code + '</code></td>' +
+                '<td><strong>' + s.last_name + ', ' + s.first_name + '</strong>' +
+                    '<br><small class="text-muted">' + s.career + '</small></td>' +
+                '<td class="text-center fw-semibold">' + s.total + '</td>' +
+                '<td class="text-center text-success fw-semibold">' + s.present + '</td>' +
+                '<td class="text-center text-warning fw-semibold">' + s.tardy + '</td>' +
+                '<td class="text-center text-danger fw-semibold">' + s.absent + '</td>' +
+                '<td><div class="d-flex align-items-center gap-2">' +
+                    '<div class="custom-progress flex-grow-1">' +
+                        '<div class="custom-progress-bar ' + colorClass + '" style="width: ' + rate + '%;"></div>' +
+                    '</div>' +
+                    '<span class="fw-bold text-dark">' + rate + '%</span>' +
+                '</div></td>' +
+                '</tr>';
+        });
+
+        tbody.innerHTML = rows.join('');
+    }
+
+    // ──────────────────────────────────────────────
+    // Tabla de historial — filtrado en cliente sobre
+    // los datos ya paginados que envió el servidor.
+    // Para filtrar páginas distintas se recarga la URL.
+    // ──────────────────────────────────────────────
+    function renderHistory() {
+        const searchCode = (document.getElementById('searchCode')?.value || '').toLowerCase().trim();
+        const searchDate = document.getElementById('searchDate')?.value || '';
+
+        let filtered = historyData;
+
+        if (searchDate) {
+            filtered = filtered.filter(item => item.date === searchDate);
+        }
+        if (searchCode) {
+            filtered = filtered.filter(item =>
+                item.student_code.toLowerCase().includes(searchCode) ||
+                item.first_name.toLowerCase().includes(searchCode) ||
+                item.last_name.toLowerCase().includes(searchCode)
+            );
+        }
+
+        const tbody = document.getElementById('historyTableBody');
+        if (!tbody) return;
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted">' +
+                '<i class="bi bi-search d-block fs-2 mb-2"></i>' +
+                'No se encontraron registros que coincidan con la búsqueda.</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(function(item) {
+            const [year, month, day] = item.date.split('-');
+            let statusClass, statusIcon;
+            if (item.status === 'Presente') {
+                statusClass = 'status-presente';
+                statusIcon  = 'bi-check-circle-fill';
+            } else if (item.status === 'Tardanza') {
+                statusClass = 'status-tardanza';
+                statusIcon  = 'bi-clock-fill';
+            } else {
+                statusClass = 'status-falta';
+                statusIcon  = 'bi-x-circle-fill';
+            }
+            return '<tr>' +
+                '<td><strong>' + day + '/' + month + '/' + year + '</strong></td>' +
+                '<td><code class="text-dark fw-bold">' + item.student_code + '</code></td>' +
+                '<td>' + item.last_name + ', ' + item.first_name + '</td>' +
+                '<td>' + item.career + '</td>' +
+                '<td class="text-center"><span class="status-badge ' + statusClass + '">' +
+                    '<i class="bi ' + statusIcon + ' me-1"></i>' + item.status +
+                '</span></td>' +
+                '</tr>';
+        }).join('');
+    }
+
+    // ──────────────────────────────────────────────
+    // Búsqueda avanzada: recarga el servidor con filtros
+    // ──────────────────────────────────────────────
+    function applyServerFilters() {
+        const code = document.getElementById('searchCode')?.value.trim() || '';
+        const date = document.getElementById('searchDate')?.value || '';
+        
+        // Evitar que se consulten fechas futuras
+        const now = new Date();
+        const today = now.getFullYear() + '-' +
+            String(now.getMonth() + 1).padStart(2, '0') + '-' +
+            String(now.getDate()).padStart(2, '0');
+        
+        if (date && date > today) {
+            showNotification('❌ No puedes consultar reportes para fechas futuras.', 'danger');
+            return;
+        }
+
+        const params = new URLSearchParams();
+        if (code) params.set('search_code', code);
+        if (date) params.set('search_date', date);
+        params.set('tab', 'history');
+        window.location.href = '/reports?' + params.toString();
+    }
+
+    // ──────────────────────────────────────────────
+    // Limpiar filtros
+    // ──────────────────────────────────────────────
+    function clearFilters() {
+        const now = new Date();
+        const today = now.getFullYear() + '-' +
+            String(now.getMonth() + 1).padStart(2, '0') + '-' +
+            String(now.getDate()).padStart(2, '0');
+        const codeInput = document.getElementById('searchCode');
+        const dateInput = document.getElementById('searchDate');
+        if (codeInput) codeInput.value = '';
+        if (dateInput) dateInput.value = today;
+        renderHistory();
+    }
+
+    // ──────────────────────────────────────────────
+    // Notificaciones
+    // ──────────────────────────────────────────────
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type === 'success' ? 'success' : type === 'danger' ? 'danger' : 'info'} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+        notification.style.zIndex = '9999';
+        notification.style.minWidth = '250px';
+        notification.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+    }
+
+    // ──────────────────────────────────────────────
+    // Inicialización
+    // ──────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', function() {
+        const now = new Date();
+        const today = now.getFullYear() + '-' +
+            String(now.getMonth() + 1).padStart(2, '0') + '-' +
+            String(now.getDate()).padStart(2, '0');
+        const dateInput = document.getElementById('searchDate');
+
+        if (dateInput) {
+            dateInput.setAttribute('max', today);
+            if (!dateInput.value) {
+                dateInput.value = today;
+            }
+            dateInput.addEventListener('change', function() {
+                if (dateInput.value > today) {
+                    showNotification('❌ No puedes filtrar por fechas futuras.', 'danger');
+                    dateInput.value = today;
+                }
+                renderHistory();
+            });
+        }
+
+        // Poblar datos reales al cargar
+        updateGlobalStats();
+        renderStudentStats();
+        renderHistory();
+
+        // Botón Buscar → recarga el servidor para paginación correcta
+        const btnSearch = document.getElementById('btnSearch');
+        if (btnSearch) {
+            btnSearch.addEventListener('click', applyServerFilters);
+        }
+
+        // Botón Limpiar
+        const btnClearFilters = document.getElementById('btnClearFilters');
+        if (btnClearFilters) {
+            btnClearFilters.addEventListener('click', clearFilters);
+        }
+
+        // Enter en campo de búsqueda
+        const searchCodeInput = document.getElementById('searchCode');
+        if (searchCodeInput) {
+            searchCodeInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    applyServerFilters();
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

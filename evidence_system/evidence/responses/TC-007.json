@@ -1,0 +1,13 @@
+{
+  "TEST_ID": "TC-007",
+  "TIMESTAMP": "2026-06-10T23:23:51.190372",
+  "STATUS": "PASS",
+  "INPUT": "4 intentos fallidos consecutivos de login",
+  "EXPECTED": "Cuenta NO bloqueada — el lockout debe activarse al 5.° intento",
+  "ACTUAL": "Cuenta habilitada tras 4 intentos fallidos — comportamiento correcto",
+  "EVIDENCE_FILES": {
+    "log": "logs/TC-007.log",
+    "response": "responses/TC-007.json"
+  },
+  "ANALYSIS": "El sistema bloquea la cuenta en el 5.° intento fallido consecutivo. En el 4.°, la cuenta permanece habilitada, cumpliendo la frontera AVL."
+}

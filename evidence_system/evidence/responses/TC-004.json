@@ -1,0 +1,15 @@
+{
+  "TEST_ID": "TC-004",
+  "TIMESTAMP": "2026-06-10T23:23:49.415743",
+  "STATUS": "EXCEPTION",
+  "INPUT": "first_name=\"Juan\\nPerez\" (salto de línea inyectado)",
+  "EXPECTED": "Rechazo — carácter de control inválido en nombre",
+  "ACTUAL": "Aceptado — \\s en regex incluye \\n, produce SyntaxError en reports.html",
+  "EVIDENCE_FILES": {
+    "log": "logs/TC-004.log",
+    "response": "responses/TC-004.json"
+  },
+  "ANALYSIS": "\\s en regex incluye \\n. El dato persiste y al renderizarse en reports.html con {{ student_stats_json | safe }}, se produce SyntaxError en JavaScript que destruye el módulo completo de reportes.",
+  "BUG_ID": "BUG-03",
+  "SEVERITY": "P1"
+}
