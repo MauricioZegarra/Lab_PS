@@ -1,19 +1,3 @@
-<style>
-body { font-family: 'Georgia', 'Times New Roman', serif; color: #1a1a1a; line-height: 1.8; text-align: justify; max-width: 900px; margin: 0 auto; padding: 40px; background-color: #ffffff; }
-h1 { color: #720000; text-align: center; font-size: 2.2em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 30px; border-bottom: none; }
-h2 { color: #720000; border-bottom: 2px solid #720000; padding-bottom: 8px; margin-top: 40px; font-size: 1.6em; }
-h3 { color: #4a4a4a; margin-top: 30px; font-family: 'Segoe UI', Arial, sans-serif; }
-p { margin-bottom: 20px; }
-table { width: 100%; border-collapse: collapse; margin: 30px 0; font-family: 'Segoe UI', Arial, sans-serif; font-size: 0.95em; box-shadow: 0 4px 8px rgba(0,0,0,0.05); border-radius: 8px; overflow: hidden; }
-th, td { padding: 15px 18px; border-bottom: 1px solid #eeeeee; text-align: left; }
-th { background-color: #720000; color: #ffffff; text-transform: uppercase; font-size: 0.85em; letter-spacing: 0.5px; }
-tr:nth-child(even) { background-color: #fafafa; }
-tr:hover { background-color: #f1f1f1; }
-blockquote { border-left: 6px solid #720000; background-color: #fcf4f4; padding: 20px 25px; margin: 30px 0; font-style: italic; border-radius: 0 8px 8px 0; }
-strong { color: #5a0000; }
-ul, ol { margin-bottom: 20px; padding-left: 30px; }
-li { margin-bottom: 10px; }
-</style>
 
 ---
 
