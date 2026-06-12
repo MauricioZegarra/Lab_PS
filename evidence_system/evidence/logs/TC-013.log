@@ -1,0 +1,4 @@
+[2026-06-10 23:23:52] INFO     | Iniciando TC-013: Editar estudiante con código de otro existente
+[2026-06-10 23:23:52] INFO     | Intentando cambiar código de ID=2 al código "20210001" (de otro estudiante)
+[2026-06-10 23:23:52] INFO     | POST /students/edit/2 status=200
+[2026-06-10 23:23:52] INFO     | Sistema previno correctamente la colisión de códigos

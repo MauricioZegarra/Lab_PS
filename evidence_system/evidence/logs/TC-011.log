@@ -1,0 +1,5 @@
+[2026-06-10 23:23:54] INFO     | Iniciando TC-011: API crash con payload nulo
+[2026-06-10 23:23:54] INFO     | Enviando POST /api/check-availability con body vacío
+[2026-06-10 23:23:54] CRITICAL | Excepción capturada: Excepción no controlada: AttributeError: 'NoneType' object has no attribute 'get'
+[2026-06-10 23:23:54] INFO     | Probando con body como array vacío: []
+[2026-06-10 23:23:54] CRITICAL | Excepción con array vacío: AttributeError: 'list' object has no attribute 'get'

@@ -1,0 +1,7 @@
+[2026-06-10 23:23:49] INFO     | Iniciando TC-004: Inyección de salto de línea en nombre
+[2026-06-10 23:23:49] INFO     | Input: first_name con \n embebido
+[2026-06-10 23:23:49] INFO     | validate_name("Juan\nPerez") = True
+[2026-06-10 23:23:49] CRITICAL | BUG-03 CONFIRMADO: Salto de línea pasa validación y rompe JS en reportes
+[2026-06-10 23:23:49] INFO     | POST /students/add con \n: status=200
+[2026-06-10 23:23:49] WARNING  | Estudiante creado en BD con nombre que contiene \n: id=1
+[2026-06-10 23:23:49] WARNING  | Al renderizar /reports, {{ student_stats_json | safe }} genera SyntaxError JS

@@ -1,0 +1,5 @@
+[2026-06-10 23:23:52] INFO     | Iniciando TC-009: Carrera manipulada fuera del catálogo select
+[2026-06-10 23:23:52] INFO     | Input: career="Ingeniería de Hacking" (valor no presente en el select HTML)
+[2026-06-10 23:23:52] INFO     | validate_name("Ingeniería de Hacking", 100) = True
+[2026-06-10 23:23:52] INFO     | POST /students/add con career falsa: status=200
+[2026-06-10 23:23:52] WARNING  | BUG-05 CONFIRMADO: career="Ingeniería de Hacking" persistida en BD

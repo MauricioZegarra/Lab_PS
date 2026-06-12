@@ -1,0 +1,6 @@
+[2026-06-10 23:23:50] INFO     | Iniciando TC-007: Límite inferior de lockout — 4 intentos fallidos
+[2026-06-10 23:23:50] INFO     | Intento fallido #1: status=200
+[2026-06-10 23:23:51] INFO     | Intento fallido #2: status=200
+[2026-06-10 23:23:51] INFO     | Intento fallido #3: status=200
+[2026-06-10 23:23:51] INFO     | Intento fallido #4: status=200
+[2026-06-10 23:23:51] INFO     | Resultado: PASS

@@ -1,0 +1,4 @@
+[2026-06-10 23:23:49] INFO     | Iniciando TC-005: Fecha con formato DD-MM-YYYY
+[2026-06-10 23:23:49] INFO     | Input: date=25-05-2024
+[2026-06-10 23:23:49] INFO     | GET /attendance?date=25-05-2024 status=200
+[2026-06-10 23:23:49] INFO     | Resultado: PASS — redirección segura ejecutada

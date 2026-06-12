@@ -1,0 +1,5 @@
+[2026-06-10 23:23:54] INFO     | Iniciando TC-010: CSRF en eliminación de estudiantes
+[2026-06-10 23:23:54] INFO     | Estudiante objetivo: id=1, code=20210001
+[2026-06-10 23:23:54] INFO     | Enviando POST /students/delete sin token CSRF
+[2026-06-10 23:23:54] INFO     | POST /students/delete/1: status=200
+[2026-06-10 23:23:54] CRITICAL | BUG-06 CONFIRMADO: Eliminación sin CSRF exitosa

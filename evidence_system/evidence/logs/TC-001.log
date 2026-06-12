@@ -1,0 +1,8 @@
+[2026-06-10 23:23:48] INFO     | Iniciando TC-001: Email con caracteres especiales y doble @
+[2026-06-10 23:23:48] INFO     | Probando email: user@dom!ain.com
+[2026-06-10 23:23:48] INFO     | validate_email("user@dom!ain.com") = False
+[2026-06-10 23:23:48] INFO     | POST /students/add status=200
+[2026-06-10 23:23:48] INFO     | Probando email: user@domain@com.pe
+[2026-06-10 23:23:48] INFO     | validate_email("user@domain@com.pe") = False
+[2026-06-10 23:23:48] INFO     | POST /students/add status=200
+[2026-06-10 23:23:48] INFO     | Resultado final: PASS

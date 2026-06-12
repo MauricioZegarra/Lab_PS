@@ -1,0 +1,4 @@
+[2026-06-10 23:23:49] INFO     | Iniciando TC-003: Nombre compuesto solo por guiones
+[2026-06-10 23:23:49] INFO     | Input: first_name="---"
+[2026-06-10 23:23:49] INFO     | validate_name("---") = True
+[2026-06-10 23:23:49] WARNING  | BUG-02 CONFIRMADO: Regex no exige al menos un carácter alfabético

@@ -1,0 +1,6 @@
+[2026-06-10 23:23:48] INFO     | Iniciando TC-002: Dígitos Unicode no-ASCII en código de estudiante
+[2026-06-10 23:23:48] INFO     | Input: student_code="٢٠٢١٠٠١٢"
+[2026-06-10 23:23:48] INFO     | unicode_code.isdigit() = True
+[2026-06-10 23:23:48] INFO     | len(unicode_code) = 8
+[2026-06-10 23:23:48] INFO     | validate_student_code("٢٠٢١٠٠١٢") = True
+[2026-06-10 23:23:48] WARNING  | BUG-01 CONFIRMADO: .isdigit() acepta dígitos no-ASCII

@@ -1,0 +1,10 @@
+[2026-06-10 23:23:52] INFO     | Iniciando TC-012: Inconsistencia maxlength HTML vs Backend
+[2026-06-10 23:23:52] INFO     | MAX_FIRST_NAME_LENGTH en backend: 50
+[2026-06-10 23:23:52] INFO     | validate_name("A"*50) = True
+[2026-06-10 23:23:52] INFO     | Valores maxlength encontrados en students.html: ['8', '30', '40', '120', '8', '50', '75', '120']
+[2026-06-10 23:23:52] WARNING  | Inconsistencia: HTML maxlength=8 vs Backend MAX=50
+[2026-06-10 23:23:52] WARNING  | Inconsistencia: HTML maxlength=30 vs Backend MAX=50
+[2026-06-10 23:23:52] WARNING  | Inconsistencia: HTML maxlength=40 vs Backend MAX=50
+[2026-06-10 23:23:52] WARNING  | Inconsistencia: HTML maxlength=8 vs Backend MAX=50
+[2026-06-10 23:23:52] INFO     | POST /students/add con nombre de 50 chars: status=200
+[2026-06-10 23:23:52] INFO     | Backend aceptó nombre de 50 caracteres
